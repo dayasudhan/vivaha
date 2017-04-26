@@ -15,6 +15,7 @@ public class Constants {
     public static final String GET_STATUS_URL = MAIN_URL +"/v1/vendor/order/status/";
     public static final String POST_ISOPEN = MAIN_URL +"/v1/vendor/isopen/";
     public static final String GET_PROFILE_INFO  = MAIN_URL +"/v1/profile/info/";
+    public static final String GET_PROFILE2_INFO  = MAIN_URL +"/v1/profile/info2/";
     public static final String GET_ORDER_BY_ID = MAIN_URL + "/v1/vendor/order_by_id/";
     public static final String FIREBASE_APP = "https://project-8598805513533999178.firebaseio.com";
     //To store the firebase id in shared preferences

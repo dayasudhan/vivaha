@@ -107,12 +107,12 @@ public class MainActivity extends AppCompatActivity {
                     //  isOtherFragmentOpen=false;
                     frag = new ProfileListFragment();
                 }
-//                else if (itemId == R.id.navigation_order_list) {
-//                    isTodayMenuselected = false;
-//                    ishotelFragmentOpen = true;
-//                    //isOtherFragmentOpen=false;
-//                    frag = new OrderListFragment();
-//                }
+                else if (itemId == R.id.navigation_settings) {
+                    isTodayMenuselected = false;
+                    ishotelFragmentOpen = true;
+                    //isOtherFragmentOpen=false;
+                    frag = new SearchConfigFragment();
+                }
 //                else if (itemId == R.id.navigation_menu) {
 //                    //isOtherFragmentOpen=false;
 //                    isTodayMenuselected = false;

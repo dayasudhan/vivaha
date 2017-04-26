@@ -77,7 +77,27 @@ public class ImageLoader {
             imageView.setImageResource(stub_id);
         }
     }
-
+//    public void DowloadImage(String url)
+//    {
+//
+//
+//        //Check image is stored in MemoryCache Map or not (see MemoryCache.java)
+//        Bitmap bitmap = memoryCache.get(url);
+//
+//        if(bitmap!=null){
+//            // if image is stored in MemoryCache Map then
+//            // Show image in listview row
+//            imageView.setImageBitmap(bitmap);
+//        }
+//        else
+//        {
+//            //queue Photo to download from url
+//            queuePhoto(url, imageView);
+//
+//            //Before downloading image show default image
+//            imageView.setImageResource(stub_id);
+//        }
+//    }
     private void queuePhoto(String url, ImageView imageView)
     {
         // Store image and url in PhotoToLoad object

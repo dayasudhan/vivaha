@@ -1,8 +1,5 @@
 package com.kuruvatech.vivaha;
 
-/**
- * Created by gagan on 3/3/2017.
- */
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -10,9 +7,8 @@ import android.content.SharedPreferences;
 import android.net.ParseException;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.view.*;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -23,6 +19,14 @@ import com.kuruvatech.vivaha.model.Parent;
 import com.kuruvatech.vivaha.model.Profile;
 import com.kuruvatech.vivaha.model.ProfileListAdapter;
 import com.kuruvatech.vivaha.utils.Constants;
+import com.splunk.mint.Mint;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.HttpEntity;
 import cz.msebera.android.httpclient.HttpResponse;
@@ -30,20 +34,13 @@ import cz.msebera.android.httpclient.client.HttpClient;
 import cz.msebera.android.httpclient.client.methods.HttpGet;
 import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
 import cz.msebera.android.httpclient.util.EntityUtils;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
+/**
+ * Created by gagan on 4/13/2017.
+ */
+public class ProfileListActivity extends AppCompatActivity {
 
-
-
-public class ProfileListFragment extends Fragment {
-     private static final String TAG_ID = "id";
+    private static final String TAG_ID = "id";
     private static final String TAG_ID2 = "_id";
     private static final String TAG_NAME = "name";
     private static final String TAG_EMAIL = "email";
@@ -74,34 +71,82 @@ public class ProfileListFragment extends Fragment {
     private static final String TAG_LANDMARK = "LandMark";
     private static final String TAG_CITY = "city";
 
-
-
+    String selectedAge ,selectedGender, selectedCast, selectedMothertongue;
     SharedPreferences pref;
     ArrayList<Profile> profileList;
+    ArrayList<Profile> profileListorgnl;
     String vendor_email;
     ProfileListAdapter adapter;
     JSONArray orderJarray;
     View rootview;
     ListView listView;
+    int minage = 0,maxage = 0;
 
-
-
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootview=inflater.inflate(R.layout.profilelist,container,false);
-        listView = (ListView) rootview.findViewById(R.id.listView_profilelist);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.profilelist);
+        Mint.initAndStartSession(this, "49d903c2");
+        listView = (ListView) findViewById(R.id.listView_profilelist);
+        Intent i = getIntent();
+        selectedAge = new String(i.getStringExtra("age"));
+        selectedGender = new String(i.getStringExtra("gender"));
+        selectedCast = new String(i.getStringExtra("community"));
+        selectedMothertongue = new String(i.getStringExtra("mothertongue"));
+
+//        if(selectedAge == "all")
+//        {
+//            minage = 0;
+//            maxage = 100;
+//        }
+//        else if(selectedAge == "18-22")
+//        {
+//            minage = 0;
+//            maxage = 100;
+//        }
+//        else if(selectedAge == "22-25")
+//        {
+//            minage = 22;
+//            maxage = 25;
+//        }
+//        else if(selectedAge == "25-28")
+//        {
+//            minage = 25;
+//            maxage = 28;
+//        }
+//        else if(selectedAge == "28-30")
+//        {
+//            minage = 28;
+//            maxage = 30;
+//        }
+//        else if(selectedAge == "30-32")
+//        {
+//            minage = 30;
+//            maxage = 32;
+//        }
+//        else if(selectedAge == "33-35")
+//        {
+//            minage = 33;
+//            maxage = 35;
+//        }
+//        else if(selectedAge == "35 and above")
+//        {
+//            minage = 35;
+//            maxage = 100;
+//        }
+        pref = getSharedPreferences("Khaanavali", 0);
+        vendor_email = pref.getString("email", "name");
+        Gson gson = new Gson();
 
         profileList = new ArrayList<Profile>();
-
-            ((MainActivity) getActivity())
-                    .setActionBarTitle("Profile List");
-        pref = getActivity().getSharedPreferences("Khaanavali", 0);
+        profileListorgnl = new ArrayList<Profile>();
+        setActionBarTitle("Profile List");
+        pref = getSharedPreferences("Khaanavali", 0);
         vendor_email = pref.getString("email", "name");
 
-
         bindView();
-        adapter = new ProfileListAdapter(getActivity().getApplicationContext(), R.layout.profilelist_item, profileList);
+
+        adapter = new ProfileListAdapter(getApplicationContext(), R.layout.profilelist_item, profileList);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -110,7 +155,7 @@ public class ProfileListFragment extends Fragment {
                                     long id) {
                 // TODO Auto-generated method stub
                 //          Toast.makeText(getActivity().getApplicationContext(), orderList.get(position).getCustomer().getName(), Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(getActivity(), ProfileDetail.class);
+                Intent intent = new Intent(ProfileListActivity.this, ProfileDetail.class);
                 Gson gson = new Gson();
                 String order = gson.toJson(profileList);
                 intent.putExtra("profile", order);
@@ -119,51 +164,37 @@ public class ProfileListFragment extends Fragment {
             }
         });
 
-        setHasOptionsMenu(true);
-        return rootview;
+
+    }
+    public void setActionBarTitle(String title) {
+      //  getSupportActionBar().setTitle(title);
     }
     @Override
-    public boolean onOptionsItemSelected(android.view.MenuItem item) {
-        int itemId = item.getItemId();
-        String btnName = null;
-
-        switch(itemId) {
-
-            case R.id.menu_refresh:
-                bindView();
-                return true;
-//            case R.id.menu_help:
-//                return true;
-            default:
-                return false;
-            // Android home
-        }
-
-        //  Snackbar.make(layout, "Button " + btnName, Snackbar.LENGTH_SHORT).show();
-
+    public void onBackPressed() {
+        super.onBackPressed();
     }
     public void bindView() {
         profileList.clear();
         String order_url = Constants.GET_PROFILE_INFO;
         order_url= order_url.concat(vendor_email);
-        new JSONAsyncTask(getActivity(),listView).execute(order_url);
+        new JSONAsyncTask(listView).execute(order_url);
     }
     public  class JSONAsyncTask extends AsyncTask<String, Void, Boolean> {
 
         ProgressDialog dialog;
 
         ListView mListView;
-        Activity mContex;
-        public  JSONAsyncTask(Activity contex,ListView gview)
+
+        public  JSONAsyncTask(ListView gview)
         {
             this.mListView=gview;
-            this.mContex=contex;
+
         }
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            dialog = new ProgressDialog(getActivity());
+            dialog = new ProgressDialog(ProfileListActivity.this);
             dialog.setMessage("Loading, please wait");
             dialog.setTitle("Connecting server");
             dialog.show();
@@ -290,7 +321,16 @@ public class ProfileListFragment extends Fragment {
                                 address.setStreet(addrObj.getString(TAG_STREET));
                             profile.setAddress(address);
                         }
+                        profileListorgnl.add(profile);
                         profileList.add(profile);
+//                        if((selectedCast == profile.getCommunity() || selectedCast == "all") &&
+//                                (selectedMothertongue == profile.getMothertongue() || selectedMothertongue == "all") &&
+//                                (selectedGender == profile.getGender() || selectedGender == "all")&&
+//                                (profile.getAge() >= minage && profile.getAge() <= maxage))
+//                        {
+//                            profileList.add(profile);
+//                        }
+
                     }
                     return true;
                 }
@@ -306,13 +346,16 @@ public class ProfileListFragment extends Fragment {
 
         protected void onPostExecute(Boolean result) {
             dialog.cancel();
-            adapter.notifyDataSetChanged();
+            if(result == true)
+            {
+                adapter.notifyDataSetChanged();
+            }
+
             if (result == false)
-                Toast.makeText(getActivity().getApplicationContext(), "Unable to fetch data from server", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), "Unable to fetch data from server", Toast.LENGTH_LONG).show();
 
         }
 
 
     }
-
 }
