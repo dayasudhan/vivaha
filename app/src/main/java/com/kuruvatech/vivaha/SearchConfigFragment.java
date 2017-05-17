@@ -18,6 +18,9 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.kuruvatech.vivaha.model.Address;
+import com.kuruvatech.vivaha.model.Parent;
+import com.kuruvatech.vivaha.model.Profile;
 import com.kuruvatech.vivaha.utils.Constants;
 import com.kuruvatech.vivaha.utils.SessionManager;
 
@@ -50,10 +53,43 @@ public class SearchConfigFragment extends Fragment {
     private Spinner mt_spinner,cm_spinner,age_spinner,gender_spinner;
     List<String> mtList;
     List<String> communitylist;
+    ArrayList<Profile> profileList;
+    ArrayList<Profile> profileListorgnl;
     Button searchButton;
-
+    int minage = 0,maxage = 100;
     private static final String TAG_MOTHERTONGUE = "mothertongue";
     private static final String TAG_COMUNITY = "community";
+    private static final String TAG_PROFILES = "profiles";
+    private static final String TAG_ID = "id";
+    private static final String TAG_ID2 = "_id";
+    private static final String TAG_NAME = "name";
+    private static final String TAG_EMAIL = "email";
+    private static final String TAG_ADDRESS = "address";
+    private static final String TAG_PHONE = "phone";
+    private static final String TAG_GENDER = "gender";
+    private static final String TAG_OCCUPATION = "occupation";
+    private static final String TAG_EDUCATION = "education";
+    private static final String TAG_SUMMARY = "summary";
+    private static final String TAG_COMMUNNITY = "community";
+    private static final String TAG_MOTHER_TONGUE = "mothertongue";
+    private static final String TAG_INCOME = "income";
+    private static final String TAG_GOTHRA = "gothra";
+    private static final String TAG_STAR = "star";
+    private static final String TAG_RASHI = "rashi";
+    private static final String TAG_HEIGHT = "height";
+    private static final String TAG_WEIGHT = "weight";
+    private static final String TAG_ORIGIN = "origin";
+    private static final String TAG_DOB = "dob";
+    private static final String TAG_AGE = "age";
+    private static final String TAG_LOGO = "logo";
+    private static final String TAG_PROFILE_LOGO = "profileLogo";
+    private static final String TAG_MOTHER = "mother";
+    private static final String TAG_FATHER = "father";
+    private static final String TAG_ADDRESSLINE1 = "addressLine1";
+    private static final String TAG_ADDRESSLINE2 = "addressLine2";
+    private static final String TAG_STREET = "street";
+    private static final String TAG_LANDMARK = "LandMark";
+    private static final String TAG_CITY = "city";
 
     @Nullable
     @Override
@@ -68,6 +104,9 @@ public class SearchConfigFragment extends Fragment {
 //        email = user.get(SessionManager.KEY_EMAIL);
         mtList = new ArrayList<String>();
         communitylist = new ArrayList<String>();
+        profileList = new ArrayList<Profile>();
+        profileListorgnl = new ArrayList<Profile>();
+
         selectedAge =  new String("all");
         selectedCast =  new String("all");
         selectedGender =  new String("all");
@@ -82,6 +121,21 @@ public class SearchConfigFragment extends Fragment {
                     intent.putExtra("community", selectedCast);
                     intent.putExtra("gender", selectedGender);
                     intent.putExtra("mothertongue", selectedMothertongue);
+
+
+                    for (int i = 0; i < profileListorgnl.size(); i++) {
+                        Profile profile = profileListorgnl.get(i);
+                        if((selectedCast == profile.getCommunity() || selectedCast == "all") &&
+                                (selectedMothertongue == profile.getMothertongue() || selectedMothertongue == "all") &&
+                                (selectedGender == profile.getGender() || selectedGender == "all")&&
+                                (profile.getAge() >= minage && profile.getAge() <= maxage))
+                        {
+                            profileList.add(profile);
+                        }
+                    }
+                    Gson gson = new Gson();
+                    String strProfileList = gson.toJson(profileListorgnl);
+                    intent.putExtra("profileList", strProfileList);
                     startActivity(intent);
                 }
             });
@@ -253,11 +307,11 @@ public class SearchConfigFragment extends Fragment {
                     HttpEntity entity = response.getEntity();
 
                     String data = EntityUtils.toString(entity);
-                    JSONArray jarray = new JSONArray(data);
-                    for (int i = jarray.length() - 1; i >= 0; i--) {
-                        JSONObject object = jarray.getJSONObject(i);
-                        if (object.has(TAG_MOTHERTONGUE)) {
-                            String mtstrarray = object.getString(TAG_MOTHERTONGUE);
+                    JSONArray jmainarray = new JSONArray(data);
+                    for (int i = jmainarray.length() - 1; i >= 0; i--) {
+                        JSONObject mainobject = jmainarray.getJSONObject(i);
+                        if (mainobject.has(TAG_MOTHERTONGUE)) {
+                            String mtstrarray = mainobject.getString(TAG_MOTHERTONGUE);
                             JSONArray mtarray = new JSONArray(mtstrarray);
                             mtList.clear();
                             mtList.add("all");
@@ -268,8 +322,8 @@ public class SearchConfigFragment extends Fragment {
                                 }
                             }
                         }
-                        if (object.has(TAG_COMUNITY)) {
-                            String cmstrarray = object.getString(TAG_COMUNITY);
+                        if (mainobject.has(TAG_COMUNITY)) {
+                            String cmstrarray = mainobject.getString(TAG_COMUNITY);
                             JSONArray cmarray = new JSONArray(cmstrarray);
                             communitylist.clear();
                             communitylist.add("all");
@@ -278,6 +332,125 @@ public class SearchConfigFragment extends Fragment {
                                 if (mtobject.has("name")) {
                                     communitylist.add(mtobject.getString("name"));
                                 }
+                            }
+                        }
+                        if (mainobject.has(TAG_PROFILES)) {
+                            String cmstrarray = mainobject.getString(TAG_PROFILES);
+                            JSONArray jarray = new JSONArray(cmstrarray);
+                            for (int j = jarray.length() - 1; j >= 0; j--) {
+                                JSONObject object = jarray.getJSONObject(j);
+
+                                Profile profile = new Profile();
+                                if (object.has(TAG_ID)) {
+                                    profile.setId(object.getString(TAG_ID));
+                                }
+                                if (object.has(TAG_NAME)) {
+                                    profile.setName(object.getString(TAG_NAME));
+                                }
+                                if (object.has(TAG_PHONE)) {
+                                    profile.setPhone(object.getString(TAG_PHONE));
+                                }
+                                if (object.has(TAG_EMAIL)) {
+                                    profile.setEmail(object.getString(TAG_EMAIL));
+                                }
+                                if (object.has(TAG_GENDER)) {
+                                    profile.setGender(object.getString(TAG_GENDER));
+                                }
+                                if (object.has(TAG_OCCUPATION)) {
+                                    profile.setOccupation(object.getString(TAG_OCCUPATION));
+                                }
+                                if (object.has(TAG_EDUCATION)) {
+                                    profile.setEducation(object.getString(TAG_EDUCATION));
+                                }
+                                if (object.has(TAG_SUMMARY)) {
+                                    profile.setSummary(object.getString(TAG_SUMMARY));
+                                }
+                                if (object.has(TAG_COMMUNNITY)) {
+                                    profile.setCommunity(object.getString(TAG_COMMUNNITY));
+                                }
+                                if (object.has(TAG_MOTHER_TONGUE)) {
+                                    profile.setMothertongue(object.getString(TAG_MOTHER_TONGUE));
+                                }
+                                if (object.has(TAG_INCOME)) {
+                                    profile.setIncome(object.getString(TAG_INCOME));
+                                }
+                                if (object.has(TAG_GOTHRA)) {
+                                    profile.setGothra(object.getString(TAG_GOTHRA));
+                                }
+                                if (object.has(TAG_STAR)) {
+                                    profile.setStar(object.getString(TAG_STAR));
+                                }
+                                if (object.has(TAG_RASHI)) {
+                                    profile.setRashi(object.getString(TAG_RASHI));
+                                }
+                                if (object.has(TAG_HEIGHT)) {
+                                    profile.setHeight(Float.parseFloat(object.getString(TAG_HEIGHT)));
+                                }
+                                if (object.has(TAG_WEIGHT)) {
+                                    profile.setWeight(Float.parseFloat(object.getString(TAG_WEIGHT)));
+                                }
+                                if (object.has(TAG_ORIGIN)) {
+                                    profile.setOrigin(object.getString(TAG_ORIGIN));
+                                }
+                                if (object.has(TAG_DOB)) {
+                                    profile.setDob(object.getString(TAG_DOB));
+                                }
+                                if (object.has(TAG_AGE)) {
+                                    try {
+                                        int intValue = object.getInt(TAG_AGE);
+                                        profile.setAge(intValue);
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+
+                                }
+                                if (object.has(TAG_LOGO)) {
+                                    profile.setLogo(object.getString(TAG_LOGO));
+                                }
+                                if (object.has(TAG_PROFILE_LOGO)) {
+                                    profile.setProfileLogo(object.getString(TAG_PROFILE_LOGO));
+                                }
+                                if (object.has(TAG_FATHER)) {
+                                    JSONObject obj = object.getJSONObject(TAG_FATHER);
+                                    Parent parent = new Parent();
+                                    if (obj.has(TAG_NAME))
+                                        parent.setName(obj.getString(TAG_NAME));
+                                    if (obj.has(TAG_OCCUPATION))
+                                        parent.setOccupation(obj.getString(TAG_OCCUPATION));
+                                    if (obj.has(TAG_PHONE))
+                                        parent.setPhone(obj.getString(TAG_PHONE));
+                                    profile.setFather(parent);
+                                }
+                                if (object.has(TAG_MOTHER)) {
+                                    JSONObject obj = object.getJSONObject(TAG_MOTHER);
+                                    Parent parent = new Parent();
+                                    if (obj.has(TAG_NAME))
+                                        parent.setName(obj.getString(TAG_NAME));
+                                    if (obj.has(TAG_OCCUPATION))
+                                        parent.setOccupation(obj.getString(TAG_OCCUPATION));
+                                    if (obj.has(TAG_PHONE))
+                                        parent.setPhone(obj.getString(TAG_PHONE));
+                                    profile.setMother(parent);
+                                }
+
+                                if (object.has(TAG_ADDRESS)) {
+                                    JSONObject addrObj = object.getJSONObject(TAG_ADDRESS);
+                                    Address address = new Address();
+                                    if (addrObj.has(TAG_ADDRESSLINE1))
+                                        address.setAddressLine1(addrObj.getString(TAG_ADDRESSLINE1));
+                                    if (addrObj.has(TAG_ADDRESSLINE1))
+                                        address.setAddressLine2(addrObj.getString(TAG_ADDRESSLINE2));
+
+                                    if (addrObj.has(TAG_CITY))
+                                        address.setCity(addrObj.getString(TAG_CITY));
+                                    if (addrObj.has(TAG_LANDMARK))
+                                        address.setLandMark(addrObj.getString(TAG_LANDMARK));
+                                    if (addrObj.has(TAG_STREET))
+                                        address.setStreet(addrObj.getString(TAG_STREET));
+                                    profile.setAddress(address);
+                                }
+                                profileListorgnl.add(profile);
+                                //profileList.add(profile);
                             }
                         }
                     }
