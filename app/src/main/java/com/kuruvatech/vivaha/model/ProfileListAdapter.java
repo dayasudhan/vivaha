@@ -63,6 +63,7 @@ public class ProfileListAdapter extends ArrayAdapter<Profile> {
         itemHolder.profileoccupation.setText(profileList.get(position).getOccupation());
         String image_url = profileList.get(position).getLogo();
         imageLoader.DisplayImage(image_url,  itemHolder.profilelogo);
+      //  imageLoader.DowloadImage(profileList.get(position).getProfileLogo());
         return v;
 
     }

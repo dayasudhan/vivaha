@@ -7,7 +7,9 @@ import android.content.SharedPreferences;
 import android.net.ParseException;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -140,7 +142,7 @@ public class ProfileListActivity extends AppCompatActivity {
 
         profileList = new ArrayList<Profile>();
         profileListorgnl = new ArrayList<Profile>();
-        setActionBarTitle("Profile List");
+        setToolBar();
         pref = getSharedPreferences("Khaanavali", 0);
         vendor_email = pref.getString("email", "name");
 
@@ -166,9 +168,31 @@ public class ProfileListActivity extends AppCompatActivity {
 
 
     }
-    public void setActionBarTitle(String title) {
-      //  getSupportActionBar().setTitle(title);
+    private void setToolBar() {
+        Toolbar tb = (Toolbar) findViewById(R.id.toolbar2);
+        setSupportActionBar(tb);
+        tb.setTitleTextColor(getResources().getColor(R.color.titleTextColor));
+        tb.setSubtitleTextColor(getResources().getColor(R.color.parrotgreen6));
+        ActionBar ab = getSupportActionBar();
+        if(ab != null) {
+            ab.setHomeAsUpIndicator(R.drawable.ic_action_back);
+            ab.setDisplayHomeAsUpEnabled(true);
+            ab.setTitle("Profiles List");
+        }
     }
+    @Override
+    public boolean onOptionsItemSelected(android.view.MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                // API 5+ solution
+                onBackPressed();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();

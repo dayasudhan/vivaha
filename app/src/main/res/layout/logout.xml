@@ -21,7 +21,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/buttonselector"
-        android:textColor="#ffffff"
+        android:textColor="@color/titleTextColor"
         android:text="Logout"/>
 
 

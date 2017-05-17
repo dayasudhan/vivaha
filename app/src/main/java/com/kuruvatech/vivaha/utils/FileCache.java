@@ -5,6 +5,7 @@ package com.kuruvatech.vivaha.utils;
  */
 
 import android.content.Context;
+import android.os.Environment;
 
 import java.io.File;
 
@@ -19,8 +20,12 @@ public class FileCache {
         if (true)
         {
             //if SDCARD is mounted (SDCARD is present on device and mounted)
-            cacheDir = new File(
-                    context.getFilesDir().getPath(),"LazyList");
+//            cacheDir = new File(
+//                    context.getFilesDir().getPath(),"LazyList");
+            cacheDir = new File(Environment.getExternalStorageDirectory()
+                    + "/Android/data/"
+                    + context.getPackageName()
+                    + "/Files");
         }
 //        else
 //        {
@@ -34,10 +39,10 @@ public class FileCache {
         }
     }
 
-    public File getFile(String url){
+    public File  getFile(String url){
         //Identify images by hashcode or encode by URLEncoder.encode.
         String filename= String.valueOf(url.hashCode());
-
+        filename = filename.concat(".jpg");
         File f = new File(cacheDir, filename);
         return f;
 

@@ -5,8 +5,10 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -18,6 +20,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -58,9 +61,9 @@ public class ProfileDetail extends AppCompatActivity {
     TextView txtViewmother ;
     TextView txtViewcommunity ;
     TextView txtViewdetailsummary ;
-    ImageView background;
+    ImageView background,background2;
     ImageLoader imageLoader;
-
+    String bitmap;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -98,6 +101,7 @@ public class ProfileDetail extends AppCompatActivity {
         txtViewdetailsummary = (TextView) findViewById(R.id.detailsummary);
 
         background = (ImageView) findViewById(R.id.background);
+        background2 = (ImageView) findViewById(R.id.background2);
         imageLoader = new ImageLoader(getApplicationContext().getApplicationContext());
 
         btnnext= (Button) findViewById(R.id.next_button);
@@ -129,12 +133,26 @@ public class ProfileDetail extends AppCompatActivity {
         btnshareit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
-                    Intent shareIntent = new Intent();
-                    shareIntent.setAction(Intent.ACTION_SEND);
-                    shareIntent.putExtra(Intent.EXTRA_TEXT, profile.getProfileLogo());
-                    shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Matrimony Profile");
-                    shareIntent.setType("text/plain");
-                    startActivity(Intent.createChooser(shareIntent, "Share Image"));
+//                    Intent shareIntent = new Intent();
+//                    shareIntent.setAction(Intent.ACTION_SEND);
+//                    shareIntent.putExtra(Intent.EXTRA_TEXT, profile.getProfileLogo());
+//                    shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Matrimony Profile");
+//                    shareIntent.setType("text/plain");
+//                    startActivity(Intent.createChooser(shareIntent, "Share Image"));
+
+
+
+
+//                String pathofBmp=
+//                        MediaStore.Images.Media.insertImage(getContentResolver(),
+//                                bitmap,"Matrimony Profile", null);
+                Uri uri = Uri.parse(bitmap);
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.setType("image/*");
+                shareIntent.putExtra(Intent.EXTRA_SUBJECT, "Matrimony Profile");
+                shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
+                shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                startActivity(Intent.createChooser(shareIntent, "Share Matrimony Profile"));
             };
         });
         btnphonecall.setOnClickListener(new View.OnClickListener() {
@@ -241,7 +259,12 @@ public class ProfileDetail extends AppCompatActivity {
         txtViewdetailsummary.setText(detailsummary);
 
         imageLoader.DisplayImage(profile.getLogo(),  background);
+        imageLoader.DisplayImage(profile.getProfileLogo(),  background2);
+      //  imageLoader.DowloadImage(profile.getProfileLogo());
+        bitmap =imageLoader.getImagePath(profile.getProfileLogo());
+        Toast.makeText(getApplicationContext(), bitmap, Toast.LENGTH_SHORT).show();
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -262,15 +285,18 @@ public class ProfileDetail extends AppCompatActivity {
         return true;
     }
     private void setToolBar() {
-        Toolbar tb = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar tb = (Toolbar) findViewById(R.id.toolbar2);
         setSupportActionBar(tb);
+        tb.setTitleTextColor(getResources().getColor(R.color.titleTextColor));
+        tb.setSubtitleTextColor(getResources().getColor(R.color.parrotgreen6));
         ActionBar ab = getSupportActionBar();
         if(ab != null) {
-            ab.setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
+            ab.setHomeAsUpIndicator(R.drawable.ic_action_back);
             ab.setDisplayHomeAsUpEnabled(true);
-            ab.setTitle("SHUBHA VIVAHA");
+            ab.setTitle("Profile Detail");
         }
     }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();

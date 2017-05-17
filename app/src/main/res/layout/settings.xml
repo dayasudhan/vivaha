@@ -40,8 +40,8 @@
                     <Spinner
                         android:layout_weight="1"
                         android:id="@+id/genderspinner"
-                        android:textColorHint="#181737"
-                        android:textColor="#181737"
+                        android:textColorHint="@color/titleTextColor"
+                        android:textColor="@color/titleTextColor"
                         android:padding="16dp"
                         android:gravity="right"
                         android:layout_width="match_parent"
@@ -165,14 +165,32 @@
 
     </ScrollView>
 
+    <!--<Button-->
+        <!--style="?android:attr/buttonStyleSmall"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="Search"-->
+        <!--android:id="@+id/searchbutton"-->
+        <!--android:background="@drawable/buttonselector"-->
+        <!--android:enabled="true"-->
+        <!--android:focusable="true"-->
+        <!--android:clickable="true"-->
+        <!--android:longClickable="false"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_centerHorizontal="true"-->
+
+        <!--android:layout_marginBottom="69dp" />-->
+
     <Button
-        style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Search"
+        android:textColor="@color/titleTextColor"
         android:id="@+id/searchbutton"
+        android:background="@drawable/buttonselector"
+        android:layout_marginTop="5dp"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="69dp" />
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true" />
 
 </RelativeLayout>

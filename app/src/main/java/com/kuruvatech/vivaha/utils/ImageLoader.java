@@ -37,6 +37,7 @@ public class ImageLoader {
     //Create Map (collection) to store image and image url in key value pair
     private Map<ImageView, String> imageViews = Collections.synchronizedMap(
             new WeakHashMap<ImageView, String>());
+
     ExecutorService executorService;
 
     //handler to display images in UI thread
@@ -54,7 +55,7 @@ public class ImageLoader {
 
     // default image show in list (Before online image download)
     final int stub_id= R.drawable.ic;
-
+ 
     public void DisplayImage(String url, ImageView imageView)
     {
         //Store image and url in Map
@@ -77,27 +78,12 @@ public class ImageLoader {
             imageView.setImageResource(stub_id);
         }
     }
-//    public void DowloadImage(String url)
-//    {
-//
-//
-//        //Check image is stored in MemoryCache Map or not (see MemoryCache.java)
-//        Bitmap bitmap = memoryCache.get(url);
-//
-//        if(bitmap!=null){
-//            // if image is stored in MemoryCache Map then
-//            // Show image in listview row
-//            imageView.setImageBitmap(bitmap);
-//        }
-//        else
-//        {
-//            //queue Photo to download from url
-//            queuePhoto(url, imageView);
-//
-//            //Before downloading image show default image
-//            imageView.setImageResource(stub_id);
-//        }
-//    }
+
+    public String getImagePath(String url)
+    {
+        File f=fileCache.getFile(url);
+        return f.getAbsolutePath();
+    }
     private void queuePhoto(String url, ImageView imageView)
     {
         // Store image and url in PhotoToLoad object
@@ -132,7 +118,7 @@ public class ImageLoader {
         public void run() {
             try{
                 //Check if image already downloaded
-                if(imageViewReused(photoToLoad))
+                if(photoToLoad.imageView != null && imageViewReused(photoToLoad))
                     return;
                 // download image from web url
                 Bitmap bmp = getBitmap(photoToLoad.url);
@@ -143,6 +129,8 @@ public class ImageLoader {
                 if(imageViewReused(photoToLoad))
                     return;
 
+                if(photoToLoad.imageView == null)
+                    return;
                 // Get bitmap to display
                 BitmapDisplayer bd=new BitmapDisplayer(bmp, photoToLoad);
 
@@ -157,9 +145,12 @@ public class ImageLoader {
         }
     }
 
+
+
+
     private Bitmap getBitmap(String url)
     {
-        File f=fileCache.getFile(url);
+        File f =fileCache.getFile(url);
 
         //from SD cache
         //CHECK : if trying to decode file which not exist in cache return null
@@ -193,7 +184,6 @@ public class ImageLoader {
             //Now file created and going to resize file with defined height
             // Decodes image and scales it to reduce memory consumption
             bitmap = decodeFile(f);
-
             return bitmap;
 
         } catch (Throwable ex){
@@ -255,7 +245,6 @@ public class ImageLoader {
             return true;
         return false;
     }
-
     //Used to display bitmap in the UI thread
     class BitmapDisplayer implements Runnable
     {
@@ -274,11 +263,9 @@ public class ImageLoader {
                 photoToLoad.imageView.setImageResource(stub_id);
         }
     }
-
     public void clearCache() {
         //Clear cache directory downloaded images and stored data in maps
         memoryCache.clear();
         fileCache.clear();
     }
-
 }

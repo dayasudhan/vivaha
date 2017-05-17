@@ -1,5 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/background_color"
+    >
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/toolbar2"
+            layout="@layout/toolbar" />
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -36,6 +51,11 @@
                         android:layout_height="wrap_content"
                         android:text="  Next  "
                         android:id="@+id/next_button"
+                        android:background="@drawable/locationbuttonselector"
+                        android:enabled="true"
+                        android:focusable="true"
+                        android:clickable="true"
+                        android:longClickable="false"
                         android:layout_alignParentTop="true"
                         android:layout_alignParentRight="true"
                         android:layout_alignParentEnd="true" />
@@ -46,6 +66,11 @@
                         android:layout_height="wrap_content"
                         android:text="Previous"
                         android:id="@+id/previous_button"
+                        android:background="@drawable/locationbuttonselector"
+                        android:enabled="true"
+                        android:focusable="true"
+                        android:clickable="true"
+                        android:longClickable="false"
                         android:layout_alignParentTop="true"
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true" />
@@ -56,6 +81,11 @@
                         android:layout_height="wrap_content"
                         android:text="Share It"
                         android:id="@+id/shareit_button"
+                        android:background="@drawable/locationbuttonselector"
+                        android:enabled="true"
+                        android:focusable="true"
+                        android:clickable="true"
+                        android:longClickable="false"
                         android:layout_alignParentBottom="true"
                         android:layout_alignParentRight="true"
                         android:layout_alignParentEnd="true" />
@@ -66,6 +96,11 @@
                         android:layout_height="wrap_content"
                         android:text="Call"
                         android:id="@+id/btnphonecall"
+                        android:background="@drawable/locationbuttonselector"
+                        android:enabled="true"
+                        android:focusable="true"
+                        android:clickable="true"
+                        android:longClickable="false"
                         android:layout_alignParentBottom="true"
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true" />
@@ -948,6 +983,15 @@
                         />
                 </LinearLayout>
 
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                <ImageView
+                    android:id="@+id/background2"
+                    android:layout_width="match_parent"
+                    android:layout_height="450dp"
+                    />
+                </FrameLayout>
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
@@ -963,3 +1007,7 @@
     </ScrollView>
 
 </RelativeLayout>
+    </LinearLayout>
+
+
+    </RelativeLayout>

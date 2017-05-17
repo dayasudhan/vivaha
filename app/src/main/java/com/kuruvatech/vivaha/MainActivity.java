@@ -48,8 +48,10 @@ public class MainActivity extends AppCompatActivity {
 
 
         layout = (RelativeLayout) findViewById(R.id.layout);
-        setNavigationDrawer();
-        setToolBar();
+        if(session.isLoggedIn()) {
+           setNavigationDrawer();
+           setToolBar();
+        }
     }
 
 
@@ -71,12 +73,12 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
     public void setActionBarTitle(String title) {
-    getSupportActionBar().setTitle(title);
+        getSupportActionBar().setTitle(title);
     }
     private void setToolBar() {
         Toolbar tb = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(tb);
-        tb.setTitleTextColor(getResources().getColor(R.color.parrotgreen6));
+        tb.setTitleTextColor(getResources().getColor(R.color.titleTextColor));
         tb.setSubtitleTextColor(getResources().getColor(R.color.parrotgreen6));
         ActionBar ab = getSupportActionBar();
         if(ab != null) {
@@ -90,56 +92,31 @@ public class MainActivity extends AppCompatActivity {
         dLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         NavigationView navView = (NavigationView) findViewById(R.id.navigation);
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        Fragment frag = null;
         isTodayMenuselected = true;
-        transaction.replace(R.id.frame, new ProfileListFragment());
+        transaction.replace(R.id.frame, new SearchConfigFragment());
         transaction.commit();
         ishotelFragmentOpen = true;
+
+
+
         navView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem menuItem) {
 
                 Fragment frag = null;
                 int itemId = menuItem.getItemId();
-
-                if (itemId == R.id.navigation_order_today_list) {
-                    isTodayMenuselected = true;
-                    ishotelFragmentOpen = true;
-                    //  isOtherFragmentOpen=false;
-                    frag = new ProfileListFragment();
-                }
-                else if (itemId == R.id.navigation_settings) {
+                if (itemId == R.id.navigation_settings) {
                     isTodayMenuselected = false;
                     ishotelFragmentOpen = true;
                     //isOtherFragmentOpen=false;
                     frag = new SearchConfigFragment();
                 }
-//                else if (itemId == R.id.navigation_menu) {
-//                    //isOtherFragmentOpen=false;
-//                    isTodayMenuselected = false;
-//                    ishotelFragmentOpen = false;
-//                    frag = new MenuFragment();
-//                }
-//                else if (itemId == R.id.navigation_about_me) {
-//                    //isOtherFragmentOpen=true;
-//                    ishotelFragmentOpen = false;
-//                    frag = new AboutMeFragment();
-//                }
-//                else if (itemId == R.id.navigation_about_Khaanavali) {
-//                    //isOtherFragmentOpen=true;
-//                    ishotelFragmentOpen = false;
-//                    frag = new AboutKhaanavali();
-//                }
-//                else if (itemId == R.id.navigation_settings) {
-//                    ishotelFragmentOpen = false;
-//                    //isOtherFragmentOpen=true;
-//                    frag = new SettingsFragment();
-//                }
                 else if (itemId == R.id.navigation_logout) {
                     //isOtherFragmentOpen=true;
                     frag = new LogoutFragment();
                     ishotelFragmentOpen = false;
                 }
-
                 if (frag != null) {
                     FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
@@ -148,7 +125,6 @@ public class MainActivity extends AppCompatActivity {
                     dLayout.closeDrawers();
                     return true;
                 }
-
                 return false;
             }
         });

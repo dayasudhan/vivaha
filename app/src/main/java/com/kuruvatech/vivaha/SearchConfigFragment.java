@@ -63,7 +63,7 @@ public class SearchConfigFragment extends Fragment {
 //        TextView lblName = (TextView) rootview.findViewById(R.id.settingname);
 
         ((MainActivity) getActivity())
-                .setActionBarTitle("Settings");
+                .setActionBarTitle("Profiles Search");
 //        HashMap<String, String> user = session.getUserDetails();
 //        email = user.get(SessionManager.KEY_EMAIL);
         mtList = new ArrayList<String>();
