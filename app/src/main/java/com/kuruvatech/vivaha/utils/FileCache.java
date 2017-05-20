@@ -22,10 +22,8 @@ public class FileCache {
             //if SDCARD is mounted (SDCARD is present on device and mounted)
 //            cacheDir = new File(
 //                    context.getFilesDir().getPath(),"LazyList");
-            cacheDir = new File(Environment.getExternalStorageDirectory()
-                    + "/Android/data/"
-                    + context.getPackageName()
-                    + "/Files");
+            cacheDir = new File(context.getExternalFilesDir(Environment.getDataDirectory().getAbsolutePath()).getAbsolutePath());
+
         }
 //        else
 //        {

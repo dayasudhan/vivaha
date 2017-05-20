@@ -118,7 +118,7 @@ public class ImageLoader {
         public void run() {
             try{
                 //Check if image already downloaded
-                if(photoToLoad.imageView != null && imageViewReused(photoToLoad))
+                if( imageViewReused(photoToLoad))
                     return;
                 // download image from web url
                 Bitmap bmp = getBitmap(photoToLoad.url);

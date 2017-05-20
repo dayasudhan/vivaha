@@ -44,7 +44,6 @@ import cz.msebera.android.httpclient.util.EntityUtils;
 public class ProfileListActivity extends AppCompatActivity {
 
 
-    String selectedAge ,selectedGender, selectedCast, selectedMothertongue;
     SharedPreferences pref;
     ArrayList<Profile> profileList;
     String vendor_email;
@@ -59,10 +58,6 @@ public class ProfileListActivity extends AppCompatActivity {
         listView = (ListView) findViewById(R.id.listView_profilelist);
         profileList = new ArrayList<Profile>();
         Intent i = getIntent();
-        selectedAge = new String(i.getStringExtra("age"));
-        selectedGender = new String(i.getStringExtra("gender"));
-        selectedCast = new String(i.getStringExtra("community"));
-        selectedMothertongue = new String(i.getStringExtra("mothertongue"));
         Gson gson = new Gson();
         TypeToken<ArrayList<Profile>> token = new TypeToken<ArrayList<Profile>>() {};
         profileList = gson.fromJson(i.getStringExtra("profileList"), token.getType());

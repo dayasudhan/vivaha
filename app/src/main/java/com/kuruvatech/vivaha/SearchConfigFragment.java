@@ -117,24 +117,71 @@ public class SearchConfigFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(getActivity(), ProfileListActivity.class);
-                    intent.putExtra("age", selectedAge);
-                    intent.putExtra("community", selectedCast);
-                    intent.putExtra("gender", selectedGender);
-                    intent.putExtra("mothertongue", selectedMothertongue);
-
-
+                    String newt = new String("");
+                    newt = newt.concat(selectedAge).concat("-").concat(selectedCast).concat("-").concat(selectedGender).concat("-").concat(selectedMothertongue);
+                    Toast.makeText(getContext(), newt, Toast.LENGTH_SHORT).show();
+                    if(selectedAge.equals("all"))
+                    {
+                        minage = 0;
+                        maxage = 100;
+                    }
+                    else if(selectedAge.equals("18-22"))
+                    {
+                        minage = 18;
+                        maxage = 22;
+                    }
+                    else if(selectedAge.equals("22-25"))
+                    {
+                        minage = 22;
+                        maxage = 25;
+                    }
+                    else if(selectedAge.equals("25-28"))
+                    {
+                        minage = 25;
+                        maxage = 28;
+                    }
+                    else if(selectedAge.equals("28-30"))
+                    {
+                        minage = 28;
+                        maxage = 30;
+                    }
+                    else if(selectedAge.equals("30-32"))
+                    {
+                        minage = 30;
+                        maxage = 32;
+                    }
+                    else if(selectedAge.equals("33-35"))
+                    {
+                        minage = 33;
+                        maxage = 35;
+                    }
+                    else if(selectedAge.equals("35 and above"))
+                    {
+                        minage = 35;
+                        maxage = 100;
+                    }
+                    String casttype = new String("all");
+                    if(selectedGender.equals("Bride"))
+                    {
+                        casttype = "Female";
+                    }
+                    else if(selectedCast.equals("BrideGroom"))
+                    {
+                        casttype = "male";
+                    }
+                    profileList.clear();
                     for (int i = 0; i < profileListorgnl.size(); i++) {
                         Profile profile = profileListorgnl.get(i);
-                        if((selectedCast == profile.getCommunity() || selectedCast == "all") &&
-                                (selectedMothertongue == profile.getMothertongue() || selectedMothertongue == "all") &&
-                                (selectedGender == profile.getGender() || selectedGender == "all")&&
+                        if((selectedCast.equals(profile.getCommunity()) || selectedCast.equals("all")) &&
+                                (selectedMothertongue.equals(profile.getMothertongue()) || selectedMothertongue.equals("all")) &&
+                                (casttype.equals(profile.getGender()) || casttype.equals("all"))&&
                                 (profile.getAge() >= minage && profile.getAge() <= maxage))
                         {
                             profileList.add(profile);
                         }
                     }
                     Gson gson = new Gson();
-                    String strProfileList = gson.toJson(profileListorgnl);
+                    String strProfileList = gson.toJson(profileList);
                     intent.putExtra("profileList", strProfileList);
                     startActivity(intent);
                 }
