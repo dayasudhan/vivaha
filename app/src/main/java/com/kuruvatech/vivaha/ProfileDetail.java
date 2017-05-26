@@ -262,7 +262,7 @@ public class ProfileDetail extends AppCompatActivity {
         imageLoader.DisplayImage(profile.getProfileLogo(),  background2);
       //  imageLoader.DowloadImage(profile.getProfileLogo());
         bitmap =imageLoader.getImagePath(profile.getProfileLogo());
-        Toast.makeText(getApplicationContext(), bitmap, Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getApplicationContext(), bitmap, Toast.LENGTH_SHORT).show();
     }
 
     @Override

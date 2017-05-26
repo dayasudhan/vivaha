@@ -117,9 +117,7 @@ public class SearchConfigFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(getActivity(), ProfileListActivity.class);
-                    String newt = new String("");
-                    newt = newt.concat(selectedAge).concat("-").concat(selectedCast).concat("-").concat(selectedGender).concat("-").concat(selectedMothertongue);
-                    Toast.makeText(getContext(), newt, Toast.LENGTH_SHORT).show();
+
                     if(selectedAge.equals("all"))
                     {
                         minage = 0;
@@ -165,10 +163,13 @@ public class SearchConfigFragment extends Fragment {
                     {
                         casttype = "Female";
                     }
-                    else if(selectedCast.equals("BrideGroom"))
+                    else if(selectedGender.equals("Bridegroom"))
                     {
-                        casttype = "male";
+                        casttype = "Male";
                     }
+//                    String newt = new String("");
+//                    newt = newt.concat(selectedAge).concat("-").concat(selectedCast).concat("-").concat(casttype).concat("-").concat(selectedMothertongue);
+//                    Toast.makeText(getContext(), newt, Toast.LENGTH_SHORT).show();
                     profileList.clear();
                     for (int i = 0; i < profileListorgnl.size(); i++) {
                         Profile profile = profileListorgnl.get(i);
@@ -288,7 +289,7 @@ public class SearchConfigFragment extends Fragment {
         List<String> genderlist = new ArrayList<String>();
         genderlist.add("all");
         genderlist.add("Bride");
-        genderlist.add("BrideGroom");
+        genderlist.add("Bridegroom");
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity().getApplicationContext(),
 
                 android.R.layout.simple_spinner_item, genderlist);
